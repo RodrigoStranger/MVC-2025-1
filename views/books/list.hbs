@@ -1,0 +1,129 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Lista de Libros</h1>
+    <a href="/books/new" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Crear Libro
+    </a>
+</div>
+
+{{#if books.length}}
+    <style>
+        /* Estilo para el botón de cerrar del modal */
+        .btn-close:hover {
+            filter: invert(26%) sepia(100%) saturate(7498%) hue-rotate(358deg) brightness(95%) contrast(118%);
+            opacity: 1;
+        }
+        
+        .custom-thead {
+            background-color: #0d6efd !important;
+            color: white !important;
+        }
+        .custom-thead th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            border: 1px solid #dee2e6 !important;
+            padding: 0.5rem !important;
+            font-weight: 600;
+        }
+        .custom-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+            background-color: white;
+            border: 1px solid #dee2e6;
+        }
+        .custom-table td {
+            border: 1px solid #dee2e6;
+            padding: 0.5rem;
+        }
+        .custom-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .custom-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead class="custom-thead">
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th style="text-align: center;">Año</th>
+                    <th>Género</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each books}}
+                <tr>
+                    <td>{{this.titulo}}</td>
+                    <td>{{this.autor}}</td>
+                    <td class="text-center">{{this.anio_publicacion}}</td>
+                    <td>{{this.genero}}</td>
+                    <td class="text-end">
+                        <div class="btn-action-group">
+                            <a href="/books/{{this.id}}" class="btn btn-sm btn-primary" title="Ver">
+                                <i class="bi bi-eye"></i><span class="btn-text"> Ver</span>
+                            </a>
+                            <a href="/books/{{this.id}}/edit" class="btn btn-sm btn-warning" title="Editar">
+                                <i class="bi bi-pencil"></i><span class="btn-text"> Editar</span>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger delete-btn" 
+                                    data-book-id="{{this.id}}" data-book-title="{{this.titulo}}"
+                                    title="Eliminar">
+                                <i class="bi bi-trash"></i><span class="btn-text"> Eliminar</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar el libro "<span id="bookTitle"></span>"?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <style>
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        .btn-close:hover {
+            opacity: 0.75;
+        }
+    </style>
+
+    <script>
+        // Función para configurar la eliminación
+        function configurarEliminacion(id, titulo) {
+            document.getElementById('bookTitle').textContent = titulo;
+            document.getElementById('deleteForm').action = `/books/${id}?_method=DELETE`;
+            return true;
+        }
+    </script>
+{{else}}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> No hay libros registrados. 
+        <a href="/books/new" class="alert-link">Agregar un libro</a>
+    </div>
+{{/if}}

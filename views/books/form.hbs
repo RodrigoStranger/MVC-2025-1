@@ -1,0 +1,65 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">{{#if libro.id}}Editar{{else}}Nuevo{{/if}} Libro</h2>
+            </div>
+            <div class="card-body">
+                <form action="/books{{#if libro.id}}/{{libro.id}}?_method=PUT{{/if}}" method="POST">
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título *</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" required 
+                               value="{{libro.titulo}}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="autor" class="form-label">Autor *</label>
+                        <input type="text" class="form-control" id="autor" name="autor" required
+                               value="{{libro.autor}}">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="anio_publicacion" class="form-label">Año de Publicación *</label>
+                            <input type="number" class="form-control" id="anio_publicacion" 
+                                   name="anio_publicacion" required min="1000" max="{{currentYear}}"
+                                   value="{{libro.anio_publicacion}}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="genero" class="form-label">Género *</label>
+                            <input type="text" class="form-control" id="genero" name="genero" required
+                                   value="{{libro.genero}}" list="generos">
+                            <datalist id="generos">
+                                <option value="Novela">
+                                <option value="Ciencia Ficción">
+                                <option value="Fantasía">
+                                <option value="Terror">
+                                <option value="Romance">
+                                <option value="Aventura">
+                                <option value="Drama">
+                                <option value="Poesía">
+                                <option value="Ensayo">
+                                <option value="Biografía">
+                            </datalist>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/books" class="btn btn-danger me-md-2">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> {{#if libro.id}}Actualizar{{else}}Guardar{{/if}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Establecer el año actual como máximo para el campo de año
+    document.getElementById('anio_publicacion').max = new Date().getFullYear();
+</script>
